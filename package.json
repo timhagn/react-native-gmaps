@@ -25,6 +25,6 @@
   },
   "homepage": "https://github.com/teamrota/react-native-gmaps#readme",
   "peerDependencies": {
-    "react-native": "^0.13.2"
+    "react-native": ">=0.12.0"
   }
 }
