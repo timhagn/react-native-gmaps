@@ -7,8 +7,18 @@ let {
   Component,
   requireNativeComponent,
   PropTypes,
-  DeviceEventEmitter
+  DeviceEventEmitter,
+  Image
 } = React;
+
+
+/* Default properties */
+let DEFAULTS = {
+  center: { lat: 51.506423, lng: -0.119108 },
+  zoomLevel: 1,
+  markers: [],
+  zoomOnMarkers: false
+};
 
 /* RNGMAPS COMP */
 var gmaps = {
@@ -17,15 +27,15 @@ var gmaps = {
     center: PropTypes.object,
     zoomLevel: PropTypes.number,
     markers: PropTypes.array,
-    zoomOnMarkers: PropTypes.bool
-  },
-};
+    zoomOnMarkers: PropTypes.bool,
 
-let DEFAULTS = {
-  center: { lat: 51.506423, lng: -0.119108 },
-  zoomLevel: 10,
-  markers: [],
-  zoomOnMarkers: false
+    /* Hackedy hack hack hack */
+    scaleX: React.PropTypes.number,
+    scaleY: React.PropTypes.number,
+    translateX: React.PropTypes.number,
+    translateY: React.PropTypes.number,
+    rotation: React.PropTypes.number,
+  },
 };
 
 let MapView = requireNativeComponent('RNGMaps', gmaps);
@@ -40,7 +50,7 @@ class RNGMaps extends Component {
   }
 
   componentDidMount () {
-    this._event = DeviceEventEmitter.addListener('mapChange', function(e: Event) {
+    this._event = DeviceEventEmitter.addListener('mapChange', (e: Event) => {
       this.props.onMapChange&&this.props.onMapChange(e);
     });
   }
@@ -54,15 +64,7 @@ class RNGMaps extends Component {
   }
 
   render () {
-    let { props } = this;
-
-    for (var key in DEFAULTS) {
-      if (!props.hasOwnProperty(key)) {
-        props[key] = DEFAULTS[key];
-      }
-    }
-
-    return ( <MapView { ...props } zoomOnMarkers={ this.state.zoomOnMarkers } /> );
+    return ( <MapView { ...this.props } zoomOnMarkers={ this.state.zoomOnMarkers } /> );
   }
 }
 

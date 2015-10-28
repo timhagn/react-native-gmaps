@@ -148,7 +148,7 @@ public class RNGMapsModule extends SimpleViewManager<MapView> {
         }
     }
 
-    private void zoomOnMarkers () {
+    private Boolean zoomOnMarkers () {
         try {
 
             int padding = 150;
@@ -161,8 +161,10 @@ public class RNGMapsModule extends SimpleViewManager<MapView> {
 
             CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, padding);
             map.animateCamera(cu);
+            return true;
         } catch (Exception e) {
             e.printStackTrace();
+            return false;
         }
     }
 
@@ -171,8 +173,9 @@ public class RNGMapsModule extends SimpleViewManager<MapView> {
         super.updateView(view, props);
         if (props.hasKey(PROP_CENTER)) updateCenter(props);
         if (props.hasKey(PROP_MARKERS)) updateMarkers(props);
-        if (props.hasKey(PROP_ZOOM_ON_MARKERS)&&props.getBoolean(PROP_ZOOM_ON_MARKERS, false))
-            zoomOnMarkers();
+        if (props.hasKey(PROP_ZOOM_ON_MARKERS)&&props.getBoolean(PROP_ZOOM_ON_MARKERS, false)) {
+          zoomOnMarkers();
+        }
+
     }
 }
-
