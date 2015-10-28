@@ -1,0 +1,27 @@
+{
+  "name": "react-native-gmaps",
+  "version": "1.0.0",
+  "description": "React Native Android Google Maps implementation.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/teamrota/react-native-gmaps.git"
+  },
+  "keywords": [
+    "react-native",
+    "mapview",
+    "android",
+    "react",
+    "google",
+    "maps"
+  ],
+  "author": "Henry Kirkness",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/teamrota/react-native-gmaps/issues"
+  },
+  "homepage": "https://github.com/teamrota/react-native-gmaps#readme"
+}
