@@ -46,7 +46,7 @@ $ npm install react-native-gmaps --save
 ...
 
 include ':react-native-gmaps', ':app'
-project(':reactnativemapboxgl').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-gmaps/android/app')
+project(':react-native-gmaps').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-gmaps/android/app')
 ```
 
 #### Step 3 - Update app Gradle Build
