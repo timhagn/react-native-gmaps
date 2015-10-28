@@ -24,7 +24,7 @@
     "url": "https://github.com/teamrota/react-native-gmaps/issues"
   },
   "homepage": "https://github.com/teamrota/react-native-gmaps#readme",
-  "dependencies": {
+  "peerDependencies": {
     "react-native": "^0.13.2"
   }
 }
