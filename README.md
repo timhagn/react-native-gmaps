@@ -47,7 +47,7 @@ Pass in a function to onMapError to respond to any errors thrown by gmaps. The o
 
 #### Step 1 - Install Google Play APK
 
-Check (here)[https://developers.google.com/android/guides/setup] && (here)[http://stackoverflow.com/questions/20121883/how-to-install-google-play-services-in-a-genymotion-vm-with-no-drag-and-drop-su] for guidance.
+Check [here](https://developers.google.com/android/guides/setup) && [here](http://stackoverflow.com/questions/20121883/how-to-install-google-play-services-in-a-genymotion-vm-with-no-drag-and-drop-su) for guidance.
 
 #### Step 2 - Install the npm package
 ```sh
