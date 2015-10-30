@@ -107,7 +107,7 @@ public class MainActivity extends FragmentActivity implements DefaultHardwareBac
 
 ```
 
-#### Step 5 - Add Google Maps to your Project
+#### Step 6 - Add Google Maps to your Project
 
 Add this to your AndroidManifest file; make sure it goes at the bottom of the `<application>` tag.
 
