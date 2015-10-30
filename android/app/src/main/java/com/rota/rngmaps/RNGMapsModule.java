@@ -48,20 +48,33 @@ public class RNGMapsModule extends SimpleViewManager<MapView> {
         mView.onCreate(null);
         mView.onResume();
         map = mView.getMap();
-        map.getUiSettings().setMyLocationButtonEnabled(false);
-        map.setMyLocationEnabled(true);
 
-        try {
-            MapsInitializer.initialize(context.getApplicationContext());
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (map == null) {
+          System.out.println("MAP IS NULL");
+          sendMapError("Map is null", "map_null");
+        } else {
+          map.getUiSettings().setMyLocationButtonEnabled(false);
+          map.setMyLocationEnabled(true);
+
+          try {
+              MapsInitializer.initialize(context.getApplicationContext());
+          } catch (Exception e) {
+              e.printStackTrace();
+              sendMapError("Map initialize error", "map_init_error");
+          }
         }
 
-        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(new LatLng(51.506423, -0.119108), 10);
-        map.animateCamera(cameraUpdate);
-        map.setOnCameraChangeListener(getCameraChangeListener());
-
         return mView;
+    }
+
+    private void sendMapError (String message, String type) {
+      WritableMap error = Arguments.createMap();
+      error.putString("message", message);
+      error.putString("type", type);
+
+      reactContext
+              .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
+              .emit("mapError", error);
     }
 
     private GoogleMap.OnCameraChangeListener getCameraChangeListener()
@@ -114,8 +127,6 @@ public class RNGMapsModule extends SimpleViewManager<MapView> {
         }
     }
 
-
-
     private Boolean updateMarkers (CatalystStylesDiffMap props) {
         try {
             mapMarkers = new ArrayList<Marker>();
@@ -150,7 +161,6 @@ public class RNGMapsModule extends SimpleViewManager<MapView> {
 
     private Boolean zoomOnMarkers () {
         try {
-
             int padding = 150;
 
             LatLngBounds.Builder builder = new LatLngBounds.Builder();

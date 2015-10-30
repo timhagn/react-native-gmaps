@@ -53,10 +53,16 @@ class RNGMaps extends Component {
     this._event = DeviceEventEmitter.addListener('mapChange', (e: Event) => {
       this.props.onMapChange&&this.props.onMapChange(e);
     });
+
+    this._error = DeviceEventEmitter.addListener('mapError', (e: Event) => {
+      console.log(`[GMAP_ERROR]: ${e.message}`);
+      this.props.onMapError&&this.props.onMapError(e);
+    });
   }
 
   componentWillUnmount () {
     this._event&&this._event.remove();
+    this._error&&this._error.remove();
   }
 
   zoomOnMarkers () {
