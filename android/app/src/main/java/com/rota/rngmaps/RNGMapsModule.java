@@ -36,6 +36,18 @@ public class RNGMapsModule extends SimpleViewManager<MapView> {
     private ReactContext reactContext;
     private ArrayList<Marker> mapMarkers = new ArrayList<Marker>();
 
+    @UIProp(UIProp.Type.MAP)
+    public static final String PROP_CENTER = "center";
+
+    @UIProp(UIProp.Type.NUMBER)
+    public static final String PROP_ZOOM_LEVEL = "zoomLevel";
+
+    @UIProp(UIProp.Type.ARRAY)
+    public static final String PROP_MARKERS = "markers";
+
+    @UIProp(UIProp.Type.BOOLEAN)
+    public static final String PROP_ZOOM_ON_MARKERS = "zoomOnMarkers";
+
     @Override
     public String getName() {
         return REACT_CLASS;
@@ -64,6 +76,8 @@ public class RNGMapsModule extends SimpleViewManager<MapView> {
           }
         }
 
+        System.out.println("__________________________INIT MAP______________________________");
+
         return mView;
     }
 
@@ -77,13 +91,10 @@ public class RNGMapsModule extends SimpleViewManager<MapView> {
               .emit("mapError", error);
     }
 
-    private GoogleMap.OnCameraChangeListener getCameraChangeListener()
-    {
-        return new GoogleMap.OnCameraChangeListener()
-        {
+    private GoogleMap.OnCameraChangeListener getCameraChangeListener() {
+        return new GoogleMap.OnCameraChangeListener() {
             @Override
-            public void onCameraChange(CameraPosition position)
-            {
+            public void onCameraChange(CameraPosition position) {
                 WritableMap params = Arguments.createMap();
                 WritableMap latLng = Arguments.createMap();
                 latLng.putDouble("lat", position.target.latitude);
@@ -99,26 +110,25 @@ public class RNGMapsModule extends SimpleViewManager<MapView> {
         };
     }
 
-    @UIProp(UIProp.Type.MAP)
-    public static final String PROP_CENTER = "center";
-
-    @UIProp(UIProp.Type.NUMBER)
-    public static final String PROP_ZOOM_LEVEL = "zoomLevel";
-
-    @UIProp(UIProp.Type.ARRAY)
-    public static final String PROP_MARKERS = "markers";
-
-    @UIProp(UIProp.Type.BOOLEAN)
-    public static final String PROP_ZOOM_ON_MARKERS = "zoomOnMarkers";
-
     private Boolean updateCenter (CatalystStylesDiffMap props) {
         try {
+            CameraUpdate cameraUpdate;
             Double lng = props.getMap(PROP_CENTER).getDouble("lng");
             Double lat = props.getMap(PROP_CENTER).getDouble("lat");
-            int zoomLevel = props.getInt(PROP_ZOOM_LEVEL, 10);
 
-            CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(new LatLng(lat, lng), zoomLevel);
+            if(props.hasKey(PROP_ZOOM_LEVEL)) {
+                int zoomLevel = props.getInt(PROP_ZOOM_LEVEL, 10);
+                cameraUpdate = CameraUpdateFactory
+                        .newLatLngZoom(
+                                new LatLng(lat, lng),
+                                props.getInt(PROP_ZOOM_LEVEL, 10)
+                        );
+            } else {
+                cameraUpdate = CameraUpdateFactory.newLatLng(new LatLng(lat, lng));
+            }
+
             map.animateCamera(cameraUpdate);
+
             return true;
         } catch (Exception e) {
             // ERROR!
@@ -129,28 +139,33 @@ public class RNGMapsModule extends SimpleViewManager<MapView> {
 
     private Boolean updateMarkers (CatalystStylesDiffMap props) {
         try {
-            mapMarkers = new ArrayList<Marker>();
-            if(props.getArray(PROP_MARKERS).size() > 0) {
-                for (int i = 0; i < props.getArray(PROP_MARKERS).size(); i++) {
-                    MarkerOptions options = new MarkerOptions();
-                    ReadableMap marker = props.getArray(PROP_MARKERS).getMap(i);
-                    if(marker.hasKey("coordinates")) {
 
-                        options.position(new LatLng(
-                                        marker.getMap("coordinates").getDouble("lat"),
-                                        marker.getMap("coordinates").getDouble("lng")
-                                )
-                        );
-
-                        if(marker.hasKey("title")) {
-                            options.title(marker.getString("title"));
-                        }
-
-                        mapMarkers.add(map.addMarker(options));
-
-                    } else break;
-                }
+            // First clear all markers from the map
+            for (Marker marker: mapMarkers) {
+                marker.remove();
             }
+            mapMarkers.clear();
+
+            // All markers to map
+            for (int i = 0; i < props.getArray(PROP_MARKERS).size(); i++) {
+                MarkerOptions options = new MarkerOptions();
+                ReadableMap marker = props.getArray(PROP_MARKERS).getMap(i);
+                if(marker.hasKey("coordinates")) {
+
+                    options.position(new LatLng(
+                                    marker.getMap("coordinates").getDouble("lat"),
+                                    marker.getMap("coordinates").getDouble("lng")
+                            )
+                    );
+
+                    if(marker.hasKey("title")) {
+                        options.title(marker.getString("title"));
+                    }
+                    mapMarkers.add(map.addMarker(options));
+
+                } else break;
+            }
+
 
             return true;
         } catch (Exception e) {
@@ -182,8 +197,10 @@ public class RNGMapsModule extends SimpleViewManager<MapView> {
     public void updateView(MapView view, CatalystStylesDiffMap props) {
         super.updateView(view, props);
         if (props.hasKey(PROP_CENTER)) updateCenter(props);
+        if (props.hasKey(PROP_ZOOM_LEVEL)) updateCenter(props);
         if (props.hasKey(PROP_MARKERS)) updateMarkers(props);
         if (props.hasKey(PROP_ZOOM_ON_MARKERS)&&props.getBoolean(PROP_ZOOM_ON_MARKERS, false)) {
+          System.out.println("GOT ZOOM ON MARKERS YO!");
           zoomOnMarkers();
         }
 
