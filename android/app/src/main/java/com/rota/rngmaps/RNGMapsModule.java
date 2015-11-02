@@ -62,7 +62,6 @@ public class RNGMapsModule extends SimpleViewManager<MapView> {
         map = mView.getMap();
 
         if (map == null) {
-          System.out.println("MAP IS NULL");
           sendMapError("Map is null", "map_null");
         } else {
           map.getUiSettings().setMyLocationButtonEnabled(false);
@@ -75,8 +74,6 @@ public class RNGMapsModule extends SimpleViewManager<MapView> {
               sendMapError("Map initialize error", "map_init_error");
           }
         }
-
-        System.out.println("__________________________INIT MAP______________________________");
 
         return mView;
     }
@@ -200,7 +197,6 @@ public class RNGMapsModule extends SimpleViewManager<MapView> {
         if (props.hasKey(PROP_ZOOM_LEVEL)) updateCenter(props);
         if (props.hasKey(PROP_MARKERS)) updateMarkers(props);
         if (props.hasKey(PROP_ZOOM_ON_MARKERS)&&props.getBoolean(PROP_ZOOM_ON_MARKERS, false)) {
-          System.out.println("GOT ZOOM ON MARKERS YO!");
           zoomOnMarkers();
         }
 
