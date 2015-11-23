@@ -8,12 +8,15 @@ let {
   requireNativeComponent,
   PropTypes,
   DeviceEventEmitter,
+  NativeModules,
   Image
 } = React;
 
+var RNGMapsModule = NativeModules.RNGMapsModule;
+
 /* RNGMAPS COMP */
 var gmaps = {
-  name: 'RNGMaps',
+  name: 'RNGMapsViewManager',
   propTypes: {
     center: PropTypes.object,
     zoomLevel: PropTypes.number,
@@ -29,7 +32,7 @@ var gmaps = {
   },
 };
 
-let MapView = requireNativeComponent('RNGMaps', gmaps);
+let MapView = requireNativeComponent('RNGMapsViewManager', gmaps);
 
 class RNGMaps extends Component {
   constructor (props) {
@@ -59,11 +62,16 @@ class RNGMaps extends Component {
     this._error&&this._error.remove();
   }
 
+
   zoomOnMarkers (bool) {
     // HACK: Bleurgh, forcing the change on zoomOnMarkers.
     this.setState({ zoomOnMarkers: null }, () => {
       this.setState({ zoomOnMarkers: bool||true });
     });
+  }
+
+  addMarker (marker) {
+    RNGMapsModule.addMarker(marker);
   }
 
   updateMarkers (markers) {
