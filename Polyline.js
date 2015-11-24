@@ -38,6 +38,13 @@ class Polyline {
     callback = callback || ()=>{};
     API.setState(this._toMap(), callback);
   }
+
+  setState(config, callback) {
+    callback = callback || ()=>{};
+    Object.assign(this, config);
+    API.setState(this._toMap(), callback);
+  }
+
   remove(callback) {
     callback = callback || ()=>{};
     API.remove(this.id, callback);
@@ -46,6 +53,8 @@ class Polyline {
     return {
       id: this.id,
       color: this.color,
+      geodesic: this.geodesic,
+      visible: this.visible,
       width: this.width,
       points: this.points
     }

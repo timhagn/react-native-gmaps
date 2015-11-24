@@ -42,6 +42,39 @@ Pass in a function to onMapError to respond to any errors thrown by gmaps. The o
 
 - **zoomOnMarkers** - Call this to zoom the map in on any markers you may have added.
 
+### API
+
+#### Polyline
+
+```
+
+var Polyline = require('react-native-gmaps/Polyline');
+
+Polyline.create({
+  color: '#0000cc',
+  width: 15,
+  geodesic: true,
+  visible: true,
+  points: [
+    [51.5, -0.1], [40.7, -74.0]
+  ]
+}, function(polyline) {
+  polyline.addPoint(45.5192919, -73.6169509, function(success) {
+    console.log("- addPoint success");
+  });
+
+  polyline.setState({
+    color: '#ff0000',
+    width: 20
+  }, function(success) {
+    console.log('- setState success');
+  });
+
+  // Remove it
+  polyline.remove();
+
+})
+```
 
 ### Install
 
