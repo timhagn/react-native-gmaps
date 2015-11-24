@@ -51,6 +51,9 @@ public class RNGMapsViewManager extends SimpleViewManager<MapView> {
         return REACT_CLASS;
     }
 
+    public GoogleMap getMap() {
+        return map;
+    }
     @Override
     protected MapView createViewInstance(ThemedReactContext context) {
         reactContext = context;
