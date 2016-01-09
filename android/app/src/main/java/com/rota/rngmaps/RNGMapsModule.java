@@ -16,6 +16,7 @@ public class RNGMapsModule extends ReactContextBaseJavaModule {
     private RNGMapsViewManager mView;
     private Handler uiHandler;
     public RNGMapsModule(ReactApplicationContext reactContext, RNGMapsViewManager view) {
+        
         super(reactContext);
         mView = view;
         uiHandler = new Handler(Looper.getMainLooper());

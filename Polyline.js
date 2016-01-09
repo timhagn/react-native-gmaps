@@ -29,24 +29,24 @@ class Polyline {
   }
 
   addPoint(lat, lng, callback) {
-    callback = callback || ()=>{};
+    callback = callback || (()=>{});
     this.points.push([lat, lng]);
     API.setState(this._toMap(), callback);
   }
 
   setPoints(points, callback) {
-    callback = callback || ()=>{};
+    callback = callback || (()=>{});
     API.setState(this._toMap(), callback);
   }
 
   setState(config, callback) {
-    callback = callback || ()=>{};
+    callback = callback || (()=>{});
     Object.assign(this, config);
     API.setState(this._toMap(), callback);
   }
 
   remove(callback) {
-    callback = callback || ()=>{};
+    callback = callback || (()=>{});
     API.remove(this.id, callback);
   }
   _toMap() {
