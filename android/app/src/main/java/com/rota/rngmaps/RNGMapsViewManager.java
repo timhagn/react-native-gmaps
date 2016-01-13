@@ -7,6 +7,7 @@ import javax.annotation.Nullable;
 import android.util.Log;
 
 import com.facebook.react.bridge.Arguments;
+import com.facebook.react.bridge.LifecycleEventListener;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
@@ -143,6 +144,29 @@ public class RNGMapsViewManager extends SimpleViewManager<MapView> {
         } else {
             map.getUiSettings().setMyLocationButtonEnabled(true);
             map.setMyLocationEnabled(true);
+
+            // We need to be sure to disable location-tracking when app enters background, in-case some other module
+            // has acquired a wake-lock and is controlling location-updates, otherwise, location-manager will be left
+            // updating location constantly, killing the battery, even though some other location-mgmt module may
+            // desire to shut-down location-services.
+            LifecycleEventListener listener = new LifecycleEventListener() {
+                @Override
+                public void onHostResume() {
+                    map.setMyLocationEnabled(true);
+                }
+
+                @Override
+                public void onHostPause() {
+                    map.setMyLocationEnabled(false);
+                }
+
+                @Override
+                public void onHostDestroy() {
+
+                }
+            };
+
+            context.addLifecycleEventListener(listener);
 
             try {
                 MapsInitializer.initialize(context.getApplicationContext());
