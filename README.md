@@ -4,7 +4,9 @@ A (currently) very lightweight implementation of Google Maps for Android.
 
 ### Example Map
 
-Your build your map with the following properties; they are all optional (it will default to simply zooming in on london without any props) apart from you must define a style with 'height' and 'width'.
+Your build your map with the following properties; they are all optional (it will default to simply zooming in on London without any props) apart from you must define a style with 'height' and 'width'.
+
+Constants for `mapTypeId` are not currently enumerated, see the [official docs](https://developers.google.com/android/reference/com/google/android/gms/maps/GoogleMap.html#MAP_TYPE_HYBRID) for reference
 
 ``` js
 let RNGMap = require('react-native-gmaps');
@@ -14,10 +16,11 @@ let RNGMap = require('react-native-gmaps');
 <RNGMap
   ref={'gmap'}
   style={ { height: 500, width: 500 } }
+  mapTypeId={4} // <-hybrid satellite view
   markers={ [
         { coordinates: {lng: 0.1, lat: 51.0} },
-        { 
-          coordinates: {lng: -0.1, lat: 51.0}, 
+        {
+          coordinates: {lng: -0.1, lat: 51.0},
           title: "Click marker to see this title!",
           snippet: "Subtitle",
           id: 0,
@@ -34,7 +37,7 @@ let RNGMap = require('react-native-gmaps');
   zoomLevel={10}
   onMapChange={(e) => console.log(e)}
   onMapError={(e) => console.log('Map error --> ', e)}
-  center={ { lng: 0.1, lat: 51.0 } } 
+  center={ { lng: 0.1, lat: 51.0 } }
   /*
    * clickMarker shows Info Window of Marker with id: 0,
    * hides Info Window if given null
