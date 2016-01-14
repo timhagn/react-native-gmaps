@@ -29,7 +29,7 @@ import android.util.Log;
 
 public class RNGMapsViewManager extends SimpleViewManager<MapView> {
     public static final String REACT_CLASS = "RNGMapsViewManager";
-    
+
     private MapView mView;
     private GoogleMap map;
     private ReactContext reactContext;
@@ -52,6 +52,7 @@ public class RNGMapsViewManager extends SimpleViewManager<MapView> {
     public static final String PROP_MARKERS             = "markers";
     public static final String PROP_ZOOM_ON_MARKERS     = "zoomOnMarkers";
     public static final String PROP_CLICK_MARKER        = "clickMarker";
+    public static final String PROP_MAP_TYPE_ID         = "mapTypeId";
 
     @ReactProp(name = PROP_CENTER)
     public void setPropCenter(MapView view, @Nullable ReadableMap center) {
@@ -66,6 +67,13 @@ public class RNGMapsViewManager extends SimpleViewManager<MapView> {
             properties.merge(centerMap);
             updateCenter();
         }
+    }
+
+    @ReactProp(name = PROP_MAP_TYPE_ID, defaultInt = 0)
+    public void setPropMapTypeId(MapView view, int typeId) {
+      WritableMap properties = getProperties();
+      properties.putInt(PROP_MAP_TYPE_ID, typeId);
+      map.setMapType(typeId);
     }
 
     @ReactProp(name = PROP_ZOOM_LEVEL, defaultInt = 10)

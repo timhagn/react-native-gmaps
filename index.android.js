@@ -31,6 +31,7 @@ var gmaps = {
     translateX: React.PropTypes.number,
     translateY: React.PropTypes.number,
     rotation: React.PropTypes.number,
+    mapTypeId: PropTypes.number
   },
 };
 
@@ -39,7 +40,7 @@ let MapView = requireNativeComponent(gmaps.name, gmaps);
 class RNGMaps extends Component {
   constructor (props) {
     super(props);
-    
+
     this._listeners = {
       mapError: null,
       mapChange: null,
