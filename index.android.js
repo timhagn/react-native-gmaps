@@ -107,6 +107,10 @@ componentDidMount () {
           if(markersOne[i].coordinates[prop] !== markersTwo[i].coordinates[prop]) return true;
         }
       }
+      if((markersOne[i].icon !== markersTwo[i].icon) ||
+         (markersOne[i].title !== markersTwo[i].title) ||
+         (markersOne[i].snippet !== markersTwo[i].snippet) ||
+         (markersOne[i].color !== markersTwo[i].color)) return true;
     }
     return false;
   }
@@ -115,7 +119,6 @@ componentDidMount () {
     if(this._diffMarkers(nextProps.markers, this.state.markers)) {
       this.updateMarkers(nextProps.markers);
     }
-    console.log('clickMarker:' + nextProps.clickMarker);
   }
 
   render () {
