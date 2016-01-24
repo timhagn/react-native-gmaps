@@ -120,6 +120,9 @@ componentDidMount () {
     if(this._diffMarkers(nextProps.markers, this.state.markers)) {
       this.updateMarkers(nextProps.markers);
     }
+    if(nextProps.clickMarker > this.state.markers.length) {
+      nextProps.clickMarker = this.markers.length - 1;
+    }
   }
 
   render () {

@@ -72,9 +72,9 @@ public class RNGMapsViewManager extends SimpleViewManager<MapView> {
 
     @ReactProp(name = PROP_MAP_TYPE_ID, defaultInt = 0)
     public void setPropMapTypeId(MapView view, int typeId) {
-      WritableMap properties = getProperties();
-      properties.putInt(PROP_MAP_TYPE_ID, typeId);
-      map.setMapType(typeId);
+        WritableMap properties = getProperties();
+        properties.putInt(PROP_MAP_TYPE_ID, typeId);
+        map.setMapType(typeId);
     }
 
     @ReactProp(name = PROP_ZOOM_LEVEL, defaultInt = 10)
@@ -106,18 +106,27 @@ public class RNGMapsViewManager extends SimpleViewManager<MapView> {
         String key = String.valueOf(clickMarker);
         if (clickMarker == null) {
             if (properties.hasKey(PROP_CLICK_MARKER)) {
-                if (markerLookup.containsKey(String.valueOf(properties.getInt(PROP_CLICK_MARKER)))) {
-                    Marker marker = mapMarkers.get(Integer.parseInt(markerLookup.get(String.valueOf(properties.getInt(PROP_CLICK_MARKER)))) );
-                    marker.hideInfoWindow();
-                    Log.i(REACT_CLASS, "hideInfoWindow");
+                try {
+                    if (markerLookup.containsKey(String.valueOf(properties.getInt(PROP_CLICK_MARKER)))) {
+                        Marker marker = mapMarkers.get(Integer.parseInt(markerLookup.get(String.valueOf(properties.getInt(PROP_CLICK_MARKER)))));
+                        marker.hideInfoWindow();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    sendMapError("Map Marker Error: " + e.getMessage(), "map_marker_error");
                 }
             }
         } else {
-            properties.putInt(PROP_CLICK_MARKER, clickMarker);
-            if (markerLookup.containsKey(key)) {
-                Marker marker = mapMarkers.get( Integer.parseInt(markerLookup.get(key)) );
-                marker.showInfoWindow();
-                Log.i(REACT_CLASS, "showInfoWindow" + String.valueOf(marker));
+            try {
+                properties.putInt(PROP_CLICK_MARKER, clickMarker);
+                if (markerLookup.containsKey(key)) {
+                    Log.i(REACT_CLASS, markerLookup.get(key));
+                    Marker marker = mapMarkers.get(Integer.parseInt(markerLookup.get(key)));
+                    marker.showInfoWindow();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                sendMapError("Map Marker Error: " + e.getMessage(), "map_marker_error");
             }
         }
     }
@@ -301,7 +310,7 @@ public class RNGMapsViewManager extends SimpleViewManager<MapView> {
         if (config.hasKey("id")) {
             // As we have to lookup it either way, switch it around
             markerLookup.put(marker.getId(), config.getString("id"));
-            markerLookup.put(config.getString("id"), marker.getId().replace("m",""));
+            markerLookup.put(config.getString("id"), marker.getId().replace("m", ""));
         }
     }
 
@@ -323,7 +332,7 @@ public class RNGMapsViewManager extends SimpleViewManager<MapView> {
                     if (markerJson.hasKey("id")) {
                         // As we have to lookup it either way, switch it around
                         markerLookup.put(marker.getId(), markerJson.getString("id"));
-                        markerLookup.put(markerJson.getString("id"), marker.getId().replace("m",""));
+                        markerLookup.put(markerJson.getString("id"), marker.getId().replace("m", ""));
                     }
 
                     mapMarkers.add(marker);
@@ -342,8 +351,8 @@ public class RNGMapsViewManager extends SimpleViewManager<MapView> {
     private MarkerOptions createMarker(ReadableMap markerJson) {
         MarkerOptions options = new MarkerOptions();
         options.position(new LatLng(
-                markerJson.getMap("coordinates").getDouble("lat"),
-                markerJson.getMap("coordinates").getDouble("lng"))
+                        markerJson.getMap("coordinates").getDouble("lat"),
+                        markerJson.getMap("coordinates").getDouble("lng"))
         );
 
         if(markerJson.hasKey("title")) {
@@ -418,3 +427,4 @@ public class RNGMapsViewManager extends SimpleViewManager<MapView> {
         }
     }
 }
+
