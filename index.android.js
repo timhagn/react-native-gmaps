@@ -112,6 +112,20 @@ componentDidMount () {
          (markersOne[i].title !== markersTwo[i].title) ||
          (markersOne[i].snippet !== markersTwo[i].snippet) ||
          (markersOne[i].color !== markersTwo[i].color)) return true;
+      if (this._diffIcon(markersOne[i].icon, markersTwo[i].icon)) return true;
+    }
+    return false;
+  }
+
+  _diffIcon (markerIconOne, markerIconTwo) {
+    if (typeof markerIconOne !== typeof markerIconTwo) {
+      return true;
+    } else {
+      for (let prop in markerIconOne) {
+        if (markerIconOne.hasOwnProperty(prop)) {
+          if(markerIconOne[prop] !== markerIconTwo[prop]) return true;
+        }
+      }  
     }
     return false;
   }
