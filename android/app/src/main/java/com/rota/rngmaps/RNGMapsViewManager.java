@@ -126,7 +126,7 @@ public class RNGMapsViewManager extends SimpleViewManager<MapView> {
                 }
             } catch (Exception e) {
                 e.printStackTrace();
-                sendMapError("Map Marker Error: " + e.getMessage(), "map_marker_error");
+                sendMapError("Map Marker Error: " + e.getMessage() + " key: " + key, "map_marker_error");
             }
         }
     }
@@ -308,9 +308,9 @@ public class RNGMapsViewManager extends SimpleViewManager<MapView> {
         Marker marker = map.addMarker(options);
         mapMarkers.add(marker);
         if (config.hasKey("id")) {
-            // As we have to lookup it either way, switch it around
+            // As we have to lookup it either way, add current position in mapMarkers, too
             markerLookup.put(marker.getId(), config.getString("id"));
-            markerLookup.put(config.getString("id"), marker.getId().replace("m", ""));
+            markerLookup.put(config.getString("id"), String.valueOf(mapMarkers.size()-1));
         }
     }
 
@@ -327,16 +327,7 @@ public class RNGMapsViewManager extends SimpleViewManager<MapView> {
             for (int i = 0; i < markerArray.size(); i++) {
                 ReadableMap markerJson = markerArray.getMap(i);
                 if(markerJson.hasKey("coordinates")) {
-                    Marker marker = map.addMarker(createMarker(markerJson));
-
-                    if (markerJson.hasKey("id")) {
-                        // As we have to lookup it either way, switch it around
-                        markerLookup.put(marker.getId(), markerJson.getString("id"));
-                        markerLookup.put(markerJson.getString("id"), marker.getId().replace("m", ""));
-                    }
-
-                    mapMarkers.add(marker);
-
+                   addMarker(markerJson);
                 } else break;
             }
 
@@ -427,4 +418,5 @@ public class RNGMapsViewManager extends SimpleViewManager<MapView> {
         }
     }
 }
+
 
